@@ -1,0 +1,6 @@
+node_modules/
+/mykey.pem
+/PhonebookEducation.rdp
+.env
+
+/backend/.env

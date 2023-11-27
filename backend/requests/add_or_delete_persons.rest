@@ -1,0 +1,21 @@
+//GET http://localhost:3001/api/persons/
+
+###
+
+//title: String,
+//author: String,
+//url: String,
+//likes: Number
+
+//Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkJvdyIsImlkIjoiNjU1ZGYwYzVjYjk2ZTFkOWM5ZjQ3NmQ2IiwiaWF0IjoxNzAwODMyNzYyfQ.d2xDNYSnNV3Oz5wKR8ghDjudaJVGqAkjjh2lmSxRdEo
+
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkJvdyIsImlkIjoiNjU1ZGYwYzVjYjk2ZTFkOWM5ZjQ3NmQ2IiwiaWF0IjoxNzAwODMyNzYyfQ.d2xDNYSnNV3Oz5wKR8ghDjudaJVGqAkjjh2lmSxRdEo
+
+{
+    "title": "15",
+    "author": "24",
+    "url": "24",
+    "likes": 11
+}
