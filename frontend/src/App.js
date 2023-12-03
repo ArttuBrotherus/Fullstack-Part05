@@ -8,6 +8,26 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [blogs, setBlogs] = useState([])
 
+  function logOut () {
+    window.localStorage.clear()
+    document.location.reload()
+  }
+
+  const dataOfLogged = async () => {
+    setBlogs(await pt05blogSer.getAll())
+  }
+
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      pt05blogSer.setToken(user.token)
+      dataOfLogged()
+    }
+  }, [])
+
+
   const handleLogin = async (event) => {
     event.preventDefault()
     
@@ -15,6 +35,12 @@ const App = () => {
       const user = await loginService.login({
         username, password,
       })
+
+      //important: note that the term's 'loggedUser' and not something else
+      window.localStorage.setItem(
+        'loggedUser', JSON.stringify(user)
+      ) 
+
       pt05blogSer.setToken(user.token)
       setUser(user)
       setBlogs(await pt05blogSer.getAll())
@@ -66,7 +92,9 @@ const App = () => {
     return (
       <div>
         <h1>blogs</h1>
-        <p>{user.name} logged in</p>
+        <span>{user.name} logged in</span>
+        <button onClick={logOut}>logout</button>
+        <p></p>
         {blogData(blogs)}
       </div>
     )
