@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
 import loginService from './services/login'
+import pt05blogSer from './services/pt05blogSer'
 
 const App = () => {
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const [blogs, setBlogs] = useState([])
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -13,12 +15,22 @@ const App = () => {
       const user = await loginService.login({
         username, password,
       })
+      pt05blogSer.setToken(user.token)
       setUser(user)
+      setBlogs(await pt05blogSer.getAll())
       setUsername('')
       setPassword('')
     } catch (exception) {
       console.log("A login error has occurred!")
     }
+  }
+
+  function getBlogData(blog){
+    return <div>{blog.title + " " + blog.author}</div>
+  }
+
+  function blogData(theBlogs){
+    return theBlogs.map(getBlogData)
   }
 
   const loginForm = () => {
@@ -53,7 +65,9 @@ const App = () => {
   const blogView = () => {
     return (
       <div>
-        <p>Blogs</p>
+        <h1>blogs</h1>
+        <p>{user.name} logged in</p>
+        {blogData(blogs)}
       </div>
     )
   }
