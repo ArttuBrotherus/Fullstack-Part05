@@ -40,6 +40,29 @@ const App = () => {
   const [newTitle, setTitle] = useState('')
   const [newAuthor, setAuthor] = useState('')
   const [newUrl, setUrl] = useState('')
+  const [notification, setNotif] = useState('')
+
+  const Notification = ({ message }) => {
+
+    const notifStyle = {
+      background: "lightgrey",
+      fontSize: "20px",
+      borderStyle: "solid",
+      borderRadius: "5px",
+      padding: "10px",
+      marginBottom: "10px"
+    }
+
+    if (message === '') {
+      return null
+    }
+  
+    return (
+      <div className='error' style={notifStyle}>
+        {message}
+      </div>
+    )
+  }
 
 const addBlog = (event) => {
   event.preventDefault()
@@ -51,9 +74,18 @@ const addBlog = (event) => {
     "likes": 0
   })
 
+  const notifTitle = newTitle
+  const notifAuthor = newAuthor
+
   setTitle('')
   setAuthor('')
   setUrl('')
+
+  setNotif("a new blog " + notifTitle + " by " + notifAuthor + " added")
+  setTimeout(() => {
+    setNotif('')
+  }, 3000)
+
 }
 
 const handleTitle = (event) => {
@@ -107,7 +139,10 @@ const handleUrl = (event) => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      console.log("A login error has occurred!")
+        setNotif("wrong username or password")
+        setTimeout(() => {
+          setNotif('')
+        }, 3000)
     }
   }
 
@@ -123,6 +158,7 @@ const handleUrl = (event) => {
     return (
       <div>
         <h2>log into application</h2>
+        <Notification message={notification} />
         <form onSubmit={handleLogin}>
           <div>
             username
@@ -152,6 +188,7 @@ const handleUrl = (event) => {
     return (
       <div>
         <h1>blogs</h1>
+        <Notification message={notification} />
         <span>{user.name} logged in</span>
         <button onClick={logOut}>logout</button>
         <p></p>
