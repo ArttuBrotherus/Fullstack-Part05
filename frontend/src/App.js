@@ -5,6 +5,7 @@ import pt05blogSer from './services/pt05blogSer'
 const BlogForm = (props) => {
   return(
     <div>
+      <h1>create new</h1>
       <form onSubmit={props.addBlog}>
         <div>
           title: <input
@@ -41,6 +42,24 @@ const App = () => {
   const [newAuthor, setAuthor] = useState('')
   const [newUrl, setUrl] = useState('')
   const [notification, setNotif] = useState('')
+  const [bFormVisible, setBlgFrmVisible] = useState(false)
+
+  const submitBlog = () => {
+    const hideWhenVisible = { display: bFormVisible ? 'none' : '' }
+    const showWhenVisible = { display: bFormVisible ? '' : 'none' }
+
+    return (
+      <div>
+        <div style={hideWhenVisible}>
+          <button onClick={() => setBlgFrmVisible(true)}>new blog</button>
+        </div>
+        <div style={showWhenVisible}>
+          <BlogForm addBlog={addBlog} newTitle={newTitle} handleTitle={handleTitle} newAuthor={newAuthor} manageAuthor={manageAuthor} newUrl={newUrl} handleUrl={handleUrl} />
+          <button onClick={() => setBlgFrmVisible(false)}>cancel</button>
+        </div>
+      </div>
+    )
+  }
 
   const Notification = ({ message }) => {
 
@@ -80,6 +99,7 @@ const addBlog = (event) => {
   setTitle('')
   setAuthor('')
   setUrl('')
+  setBlgFrmVisible(false)
 
   setNotif("a new blog " + notifTitle + " by " + notifAuthor + " added")
   setTimeout(() => {
@@ -194,8 +214,7 @@ const handleUrl = (event) => {
         <p></p>
         <p></p>
         <p></p>
-        <h1>create new</h1>
-        <BlogForm addBlog={addBlog} newTitle={newTitle} handleTitle={handleTitle} newAuthor={newAuthor} manageAuthor={manageAuthor} newUrl={newUrl} handleUrl={handleUrl} />
+        {submitBlog()}
         {blogData(blogs)}
       </div>
     )
