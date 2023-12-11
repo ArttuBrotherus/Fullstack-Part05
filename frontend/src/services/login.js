@@ -7,4 +7,6 @@ const login = async credentials => {
   return response.data
 }
 
-export default { login }
+const stepLogin = { login: login }
+
+export default stepLogin

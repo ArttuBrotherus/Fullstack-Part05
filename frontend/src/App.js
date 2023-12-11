@@ -1,65 +1,15 @@
 import { useState, useEffect } from 'react'
 import loginService from './services/login'
 import pt05blogSer from './services/pt05blogSer'
-
-const BlogForm = (props) => {
-  return(
-    <div>
-      <h1>create new</h1>
-      <form onSubmit={props.addBlog}>
-        <div>
-          title: <input
-            value={props.newTitle}
-            onChange={props.handleTitle}
-          />
-        </div>
-        <div>
-          author: <input
-            value={props.newAuthor}
-            onChange={props.manageAuthor}
-          />
-        </div>
-        <div>
-          url: <input
-            value={props.newUrl}
-            onChange={props.handleUrl}
-          />
-        </div>
-        <div>
-            <button type="submit">create</button>
-        </div>
-      </form>
-    </div>
-  )
-}
+import Togglable from './components/togglable'
+import BlogForm2 from './components/blogViewSepa'
 
 const App = () => {
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [blogs, setBlogs] = useState([])
-  const [newTitle, setTitle] = useState('')
-  const [newAuthor, setAuthor] = useState('')
-  const [newUrl, setUrl] = useState('')
   const [notification, setNotif] = useState('')
-  const [bFormVisible, setBlgFrmVisible] = useState(false)
-
-  const submitBlog = () => {
-    const hideWhenVisible = { display: bFormVisible ? 'none' : '' }
-    const showWhenVisible = { display: bFormVisible ? '' : 'none' }
-
-    return (
-      <div>
-        <div style={hideWhenVisible}>
-          <button onClick={() => setBlgFrmVisible(true)}>new blog</button>
-        </div>
-        <div style={showWhenVisible}>
-          <BlogForm addBlog={addBlog} newTitle={newTitle} handleTitle={handleTitle} newAuthor={newAuthor} manageAuthor={manageAuthor} newUrl={newUrl} handleUrl={handleUrl} />
-          <button onClick={() => setBlgFrmVisible(false)}>cancel</button>
-        </div>
-      </div>
-    )
-  }
 
   const Notification = ({ message }) => {
 
@@ -83,43 +33,6 @@ const App = () => {
     )
   }
 
-const addBlog = (event) => {
-  event.preventDefault()
-
-  pt05blogSer.create({
-    "title": newTitle,
-    "author": newAuthor,
-    "url": newUrl,
-    "likes": 0
-  })
-
-  const notifTitle = newTitle
-  const notifAuthor = newAuthor
-
-  setTitle('')
-  setAuthor('')
-  setUrl('')
-  setBlgFrmVisible(false)
-
-  setNotif("a new blog " + notifTitle + " by " + notifAuthor + " added")
-  setTimeout(() => {
-    setNotif('')
-  }, 3000)
-
-}
-
-const handleTitle = (event) => {
-  setTitle(event.target.value)
-}
-
-const manageAuthor = (event) => {
-  setAuthor(event.target.value)
-}
-
-const handleUrl = (event) => {
-  setUrl(event.target.value)
-}
-
   function logOut () {
     window.localStorage.clear()
     document.location.reload()
@@ -138,7 +51,6 @@ const handleUrl = (event) => {
       dataOfLogged()
     }
   }, [])
-
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -173,6 +85,19 @@ const handleUrl = (event) => {
   function blogData(theBlogs){
     return theBlogs.map(getBlogData)
   }
+
+  const addBlog = (blog) => {
+  
+    pt05blogSer.create(blog)
+  
+    /*
+    setNotif("a new blog " + notifTitle + " by " + notifAuthor + " added")
+    setTimeout(() => {
+      setNotif('')
+    }, 3000)
+    */
+  }
+
 
   const loginForm = () => {
     return (
@@ -214,7 +139,9 @@ const handleUrl = (event) => {
         <p></p>
         <p></p>
         <p></p>
-        {submitBlog()}
+        <Togglable buttonLabel="new blog">
+          <BlogForm2 addBlog={addBlog}/>
+        </Togglable>
         {blogData(blogs)}
       </div>
     )
