@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import loginService from './services/login'
 import pt05blogSer from './services/pt05blogSer'
 import Togglable from './components/togglable'
@@ -10,6 +10,8 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [blogs, setBlogs] = useState([])
   const [notification, setNotif] = useState('')
+
+  const appRef = useRef()
 
   const Notification = ({ message }) => {
 
@@ -89,13 +91,13 @@ const App = () => {
   const addBlog = (blog) => {
   
     pt05blogSer.create(blog)
-  
-    /*
-    setNotif("a new blog " + notifTitle + " by " + notifAuthor + " added")
+
+    appRef.current.toggleVisibility()
+
+    setNotif("a new blog " + blog.title + " by " + blog.author + " added")
     setTimeout(() => {
       setNotif('')
     }, 3000)
-    */
   }
 
 
@@ -139,7 +141,7 @@ const App = () => {
         <p></p>
         <p></p>
         <p></p>
-        <Togglable buttonLabel="new blog">
+        <Togglable buttonLabel="new blog" ref={appRef}>
           <BlogForm addBlog={addBlog}/>
         </Togglable>
         {blogData(blogs)}

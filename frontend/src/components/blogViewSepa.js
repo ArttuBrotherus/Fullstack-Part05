@@ -1,12 +1,10 @@
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import pt05blogSer from '../services/pt05blogSer'
 
 const BlogForm = ({ addBlog }) => {
   const [newTitle, setTitle] = useState('')
   const [newAuthor, setAuthor] = useState('')
   const [newUrl, setUrl] = useState('')
-
-  const blogFormRef = useRef()
 
   const newBlog = (event) => {
     event.preventDefault()
