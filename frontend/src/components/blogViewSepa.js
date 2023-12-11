@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
 import pt05blogSer from '../services/pt05blogSer'
 
-const BlogForm2 = ({ addBlog }) => {
+const BlogForm = ({ addBlog }) => {
   const [newTitle, setTitle] = useState('')
   const [newAuthor, setAuthor] = useState('')
   const [newUrl, setUrl] = useState('')
@@ -51,4 +51,4 @@ const BlogForm2 = ({ addBlog }) => {
   )
 }
 
-export default BlogForm2
+export default BlogForm

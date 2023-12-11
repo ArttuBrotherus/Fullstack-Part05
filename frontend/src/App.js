@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import loginService from './services/login'
 import pt05blogSer from './services/pt05blogSer'
 import Togglable from './components/togglable'
-import BlogForm2 from './components/blogViewSepa'
+import BlogForm from './components/blogViewSepa'
 
 const App = () => {
   const [username, setUsername] = useState('') 
@@ -140,7 +140,7 @@ const App = () => {
         <p></p>
         <p></p>
         <Togglable buttonLabel="new blog">
-          <BlogForm2 addBlog={addBlog}/>
+          <BlogForm addBlog={addBlog}/>
         </Togglable>
         {blogData(blogs)}
       </div>
