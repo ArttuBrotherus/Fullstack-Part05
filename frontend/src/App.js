@@ -91,13 +91,10 @@ const App = () => {
   }
 
   function flipVisibility (index) {
-    console.log("FLIP " + index)
     let varBlogs = [...blogs]
-    console.log(varBlogs[index])
     varBlogs[index] = {...varBlogs[index],
-      visible: !varBlogs[index].visibles
+      visible: !varBlogs[index].visible
     }
-    console.log(varBlogs)
     setBlogs(varBlogs)
   }
 
@@ -106,7 +103,6 @@ const App = () => {
     for (let i = 0; i < theBlogs.length; i++) {
       const fullBlog = theBlogs[i].full
       if (theBlogs[i].visible === false) {
-        console.log("HIDDEN")
         readyHtml.push(
           <div>
             {fullBlog.title + " " + fullBlog.author}
@@ -116,13 +112,24 @@ const App = () => {
           </div>
         )
       } else {
-        console.log("VISIBLE")
         readyHtml.push(
-          <div>VISIBLE</div>
+          <div>
+            {fullBlog.title + " " + fullBlog.author}
+            <button onClick={() => flipVisibility(i)}>
+              hide
+            </button>
+            <br/>
+            {fullBlog.url}
+            <br/>
+            <span>likes&nbsp;</span>
+            {fullBlog.likes}
+            <button>like</button>
+            <br/>
+            {user.name}
+          </div>
         )
       }
     }
-    //console.log(readyHtml)
     return readyHtml
   }
 
@@ -170,7 +177,6 @@ const App = () => {
   }
 
   const blogView = () => {
-    console.log("blogView component updated")
     return (
       <div>
         <h1>blogs</h1>
@@ -187,8 +193,6 @@ const App = () => {
       </div>
     )
   }
-
-  console.log("App component updated")
 
   return (
     <div>
