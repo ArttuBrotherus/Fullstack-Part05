@@ -40,8 +40,18 @@ const App = () => {
     document.location.reload()
   }
 
+  const eachButton = (blog) => {
+    return {
+      titleAuthor: blog.title + " " + blog.author,
+      visible: false,
+      full: blog
+    }
+  }
+
   const dataOfLogged = async () => {
-    setBlogs(await pt05blogSer.getAll())
+    const serverBlogs = await pt05blogSer.getAll()
+    const blogButtons = await serverBlogs.map(eachButton)
+    setBlogs(blogButtons)
   }
 
   useEffect(() => {
@@ -80,12 +90,40 @@ const App = () => {
     }
   }
 
-  function getBlogData(blog){
-    return <div>{blog.title + " " + blog.author}</div>
+  function flipVisibility (index) {
+    console.log("FLIP " + index)
+    let varBlogs = [...blogs]
+    console.log(varBlogs[index])
+    varBlogs[index] = {...varBlogs[index],
+      visible: !varBlogs[index].visibles
+    }
+    console.log(varBlogs)
+    setBlogs(varBlogs)
   }
 
-  function blogData(theBlogs){
-    return theBlogs.map(getBlogData)
+  const React2Blogs = ({ theBlogs }) => {
+    let readyHtml = []
+    for (let i = 0; i < theBlogs.length; i++) {
+      const fullBlog = theBlogs[i].full
+      if (theBlogs[i].visible === false) {
+        console.log("HIDDEN")
+        readyHtml.push(
+          <div>
+            {fullBlog.title + " " + fullBlog.author}
+            <button onClick={() => flipVisibility(i)}>
+              view
+            </button>
+          </div>
+        )
+      } else {
+        console.log("VISIBLE")
+        readyHtml.push(
+          <div>VISIBLE</div>
+        )
+      }
+    }
+    //console.log(readyHtml)
+    return readyHtml
   }
 
   const addBlog = (blog) => {
@@ -132,6 +170,7 @@ const App = () => {
   }
 
   const blogView = () => {
+    console.log("blogView component updated")
     return (
       <div>
         <h1>blogs</h1>
@@ -144,10 +183,12 @@ const App = () => {
         <Togglable buttonLabel="new blog" ref={appRef}>
           <BlogForm addBlog={addBlog}/>
         </Togglable>
-        {blogData(blogs)}
+        <React2Blogs theBlogs={blogs}/>
       </div>
     )
   }
+
+  console.log("App component updated")
 
   return (
     <div>
