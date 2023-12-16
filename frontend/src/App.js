@@ -113,7 +113,7 @@ const App = () => {
         )
       } else {
         readyHtml.push(
-          <div>
+          <div style={{border: "1px solid black"}}>
             {fullBlog.title + " " + fullBlog.author}
             <button onClick={() => flipVisibility(i)}>
               hide
