@@ -42,7 +42,6 @@ const App = () => {
 
   const eachButton = (blog) => {
     return {
-      titleAuthor: blog.title + " " + blog.author,
       visible: false,
       full: blog
     }
@@ -91,12 +90,29 @@ const App = () => {
   }
 
   function flipVisibility (index) {
-    let varBlogs = [...blogs]
+    const varBlogs = [...blogs]
     varBlogs[index] = {...varBlogs[index],
       visible: !varBlogs[index].visible
     }
     setBlogs(varBlogs)
   }
+
+  function addLike (localBlog) {
+    const newBlog = {...localBlog.full,
+      likes: localBlog.full.likes + 1
+    }
+    pt05blogSer.update(localBlog.full.id, newBlog)
+    const newLocalBlog = {
+      visible: localBlog.visible,
+      full: newBlog
+    }
+    const updatedBlogs = blogs.map(
+      (aBlog) => {
+        return aBlog.full.id === localBlog.full.id ? newLocalBlog : aBlog
+    }
+    )
+    setBlogs(updatedBlogs)
+  } 
 
   const React2Blogs = ({ theBlogs }) => {
     let readyHtml = []
@@ -123,7 +139,7 @@ const App = () => {
             <br/>
             <span>likes&nbsp;</span>
             {fullBlog.likes}
-            <button>like</button>
+            <button onClick={() => addLike(theBlogs[i])}>like</button>
             <br/>
             {user.name}
           </div>
