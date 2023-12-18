@@ -10,6 +10,7 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [blogs, setBlogs] = useState([])
   const [notification, setNotif] = useState('')
+  const [userAddedBlogs, setUsAdBlogs] = useState([])
 
   const appRef = useRef()
 
@@ -115,6 +116,20 @@ const App = () => {
     setBlogs(updatedBlogs)
   } 
 
+  function removeButton(mongoBlog){
+    console.log("Trill")
+    for (let userAdded in userAddedBlogs) {
+      const userTitleAuthor = userAdded.title + userAdded.author
+      const mongoUserAuthor = mongoBlog.title + mongoBlog.author
+      if (userTitleAuthor === mongoUserAuthor) {
+        return <div>
+          Sooner....
+        </div>
+      }
+    }
+    return
+  }
+
   const React2Blogs = ({ theBlogs }) => {
     let readyHtml = []
     for (let i = 0; i < theBlogs.length; i++) {
@@ -143,6 +158,7 @@ const App = () => {
             <button onClick={() => addLike(theBlogs[i])}>like</button>
             <br/>
             {user.name}
+            {removeButton(fullBlog)}
           </div>
         )
       }
@@ -157,6 +173,8 @@ const App = () => {
     await pt05blogSer.create(blog)
 
     dataOfLogged()
+
+    setUsAdBlogs(userAddedBlogs => userAddedBlogs.concat(blog))
 
     setNotif("a new blog " + blog.title + " by " + blog.author + " added")
     setTimeout(() => {
