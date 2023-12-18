@@ -50,7 +50,8 @@ const App = () => {
   const dataOfLogged = async () => {
     const serverBlogs = await pt05blogSer.getAll()
     const blogButtons = await serverBlogs.map(eachButton)
-    setBlogs(blogButtons)
+    const sortedBlogs = blogButtons.sort((a, b) => a.full.likes - b.full.likes)
+    setBlogs(sortedBlogs)
   }
 
   useEffect(() => {
@@ -75,10 +76,10 @@ const App = () => {
       window.localStorage.setItem(
         'loggedUser', JSON.stringify(user)
       ) 
-
       pt05blogSer.setToken(user.token)
       setUser(user)
-      setBlogs(await pt05blogSer.getAll())
+      dataOfLogged()
+      console.log(blogs)
       setUsername('')
       setPassword('')
     } catch (exception) {
@@ -149,11 +150,13 @@ const App = () => {
     return readyHtml
   }
 
-  const addBlog = (blog) => {
-  
-    pt05blogSer.create(blog)
+  const addBlog = async (blog) => {
 
     appRef.current.toggleVisibility()
+  
+    await pt05blogSer.create(blog)
+
+    dataOfLogged()
 
     setNotif("a new blog " + blog.title + " by " + blog.author + " added")
     setTimeout(() => {
