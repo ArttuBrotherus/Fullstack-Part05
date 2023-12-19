@@ -3,6 +3,7 @@ import loginService from './services/login'
 import pt05blogSer from './services/pt05blogSer'
 import Togglable from './components/togglable'
 import BlogForm from './components/blogViewSepa'
+import PropTypes from 'prop-types'
 
 const App = () => {
   const [username, setUsername] = useState('') 
@@ -34,6 +35,10 @@ const App = () => {
         {message}
       </div>
     )
+  }
+
+  Notification.propTypes = {
+    message: PropTypes.string.isRequired
   }
 
   function logOut () {
