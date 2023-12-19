@@ -80,7 +80,6 @@ const App = () => {
       pt05blogSer.setToken(user.token)
       setUser(user)
       dataOfLogged()
-      console.log(blogs)
       setUsername('')
       setPassword('')
     } catch (exception) {
@@ -116,14 +115,22 @@ const App = () => {
     setBlogs(updatedBlogs)
   } 
 
+  function blogRemoval(mongoBlog){
+    if (window.confirm("Remove blog " + mongoBlog.title + " by " + mongoBlog.author)) {
+      pt05blogSer.remove(mongoBlog.id)
+      dataOfLogged()
+    }    
+  }
+
   function removeButton(mongoBlog){
-    console.log("Trill")
-    for (let userAdded in userAddedBlogs) {
+    for (let userAdded of userAddedBlogs) {
       const userTitleAuthor = userAdded.title + userAdded.author
-      const mongoUserAuthor = mongoBlog.title + mongoBlog.author
-      if (userTitleAuthor === mongoUserAuthor) {
+      const mongoTitleAuthor = mongoBlog.title + mongoBlog.author
+      if (userTitleAuthor === mongoTitleAuthor) {
         return <div>
-          Sooner....
+          <button onClick={() => blogRemoval(mongoBlog)}>
+            remove
+          </button>
         </div>
       }
     }
