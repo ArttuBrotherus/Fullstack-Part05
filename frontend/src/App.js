@@ -5,6 +5,38 @@ import Togglable from './components/togglable'
 import BlogForm from './components/blogViewSepa'
 import PropTypes from 'prop-types'
 
+const IndiBlog = ({ blogData, flipVisibility, addLike, removeButton, user }) => {
+	const mongoBlog = blogData.full
+	if (blogData.visible === false) {
+		return (
+			<div className='summary'>
+				{mongoBlog.title + " " + mongoBlog.author}
+				<button onClick={() => flipVisibility(mongoBlog.id)}>
+					view
+				</button>
+			</div>
+		)
+	} else {
+		return (
+			<div style={{ border: "1px solid black" }} className='allDetails'>
+				{mongoBlog.title + " " + mongoBlog.author}
+				<button onClick={() => flipVisibility(mongoBlog.id)}>
+					hide
+				</button>
+				<br />
+				{mongoBlog.url}
+				<br />
+				<span>likes</span>&nbsp;
+				{mongoBlog.likes}
+				<button onClick={() => addLike(blogData)}>like</button>
+				<br />
+				{user.name}
+				{removeButton(mongoBlog)}
+			</div>
+		)
+	}
+}
+
 const App = () => {
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
@@ -149,41 +181,11 @@ const App = () => {
 		return
 	}
 
-	const IndiBlog = ({ blogData }) => {
-		const mongoBlog = blogData.full
-		if (blogData.visible === false) {
-			return (
-				<div className='summary'>
-					{mongoBlog.title + " " + mongoBlog.author}
-					<button onClick={() => flipVisibility(mongoBlog.id)}>
-						view
-					</button>
-				</div>
-			)
-		} else {
-			return (
-				<div style={{ border: "1px solid black" }} className='allDetails'>
-					{mongoBlog.title + " " + mongoBlog.author}
-					<button onClick={() => flipVisibility(mongoBlog.id)}>
-						hide
-					</button>
-					<br />
-					{mongoBlog.url}
-					<br />
-					<span>likes</span>&nbsp;
-					{mongoBlog.likes}
-					<button onClick={() => addLike(blogData)}>like</button>
-					<br />
-					{user.name}
-					{removeButton(mongoBlog)}
-				</div>
-			)
-		}
-	}
-
 	const BlogList = ({ theBlogs }) => {
 		return theBlogs.map(
-			(oneBlog) => <IndiBlog blogData={oneBlog} key={oneBlog.full.id} />
+			(oneBlog) => <IndiBlog blogData={oneBlog} key={oneBlog.full.id}
+				flipVisibility={flipVisibility} addLike={addLike} removeButton={removeButton}
+				user={user}/>
 		)
 	}
 
