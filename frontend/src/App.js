@@ -41,7 +41,7 @@ const App = () => {
 		message: PropTypes.string.isRequired
 	}
 
-	function logOut () {
+	function logOut() {
 		window.localStorage.clear()
 		document.location.reload()
 	}
@@ -95,16 +95,23 @@ const App = () => {
 		}
 	}
 
-	function flipVisibility (index) {
-		const varBlogs = [...blogs]
-		varBlogs[index] = { ...varBlogs[index],
-			visible: !varBlogs[index].visible
+	function flipVisibility(id) {
+		const varBlogs = blogs.map((oneBlog) => {
+			if (oneBlog.full.id === id){
+				return { ...oneBlog,
+					visible: !oneBlog.visible
+				}
+			}else{
+				return oneBlog
+			}
 		}
+		)
 		setBlogs(varBlogs)
 	}
 
-	function addLike (localBlog) {
-		const newBlog = { ...localBlog.full,
+	function addLike(localBlog) {
+		const newBlog = {
+			...localBlog.full,
 			likes: localBlog.full.likes + 1
 		}
 		pt05blogSer.update(localBlog.full.id, newBlog)
@@ -120,14 +127,14 @@ const App = () => {
 		setBlogs(updatedBlogs)
 	}
 
-	function blogRemoval(mongoBlog){
+	function blogRemoval(mongoBlog) {
 		if (window.confirm("Remove blog " + mongoBlog.title + " by " + mongoBlog.author)) {
 			pt05blogSer.remove(mongoBlog.id)
 			dataOfLogged()
 		}
 	}
 
-	function removeButton(mongoBlog){
+	function removeButton(mongoBlog) {
 		for (let userAdded of userAddedBlogs) {
 			const userTitleAuthor = userAdded.title + userAdded.author
 			const mongoTitleAuthor = mongoBlog.title + mongoBlog.author
@@ -142,41 +149,52 @@ const App = () => {
 		return
 	}
 
-	const React2Blogs = ({ theBlogs }) => {
-		let readyHtml = []
-		for (let i = 0; i < theBlogs.length; i++) {
-			const fullBlog = theBlogs[i].full
-			if (theBlogs[i].visible === false) {
-				readyHtml.push(
-					<div>
-						{fullBlog.title + " " + fullBlog.author}
-						<button onClick={() => flipVisibility(i)}>
-							view
-						</button>
-					</div>
-				)
-			} else {
-				readyHtml.push(
-					<div style={{ border: "1px solid black" }}>
-						{fullBlog.title + " " + fullBlog.author}
-						<button onClick={() => flipVisibility(i)}>
-							hide
-						</button>
-						<br/>
-						{fullBlog.url}
-						<br/>
-						<span>likes&nbsp;</span>
-						{fullBlog.likes}
-						<button onClick={() => addLike(theBlogs[i])}>like</button>
-						<br/>
-						{user.name}
-						{removeButton(fullBlog)}
-					</div>
-				)
-			}
+	const IndiBlog = ({ blogData }) => {
+		const mongoBlog = blogData.full
+		if (blogData.visible === false) {
+			return (
+				<div className='summary'>
+					{mongoBlog.title + " " + mongoBlog.author}
+					<button onClick={() => flipVisibility(mongoBlog.id)}>
+						view
+					</button>
+				</div>
+			)
+		} else {
+			return (
+				<div style={{ border: "1px solid black" }} className='allDetails'>
+					{mongoBlog.title + " " + mongoBlog.author}
+					<button onClick={() => flipVisibility(mongoBlog.id)}>
+						hide
+					</button>
+					<br />
+					{mongoBlog.url}
+					<br />
+					<span>likes</span>&nbsp;
+					{mongoBlog.likes}
+					<button onClick={() => addLike(blogData)}>like</button>
+					<br />
+					{user.name}
+					{removeButton(mongoBlog)}
+				</div>
+			)
 		}
-		return readyHtml
 	}
+
+	const BlogList = ({ theBlogs }) => {
+		return theBlogs.map(
+			(oneBlog) => <IndiBlog blogData={oneBlog} key={oneBlog.full.id} />
+		)
+	}
+
+	/*
+const numbers = [65, 44, 12, 4];
+const newArr = numbers.map(myFunction)
+
+function myFunction(num) {
+  return num * 10;
+}
+*/
 
 	const addBlog = async (blog) => {
 
@@ -208,6 +226,7 @@ const App = () => {
 							value={username}
 							name="Username"
 							onChange={({ target }) => setUsername(target.value)}
+							placeholder='give username here'
 						/>
 					</div>
 					<div>
@@ -217,6 +236,7 @@ const App = () => {
 							value={password}
 							name="Password"
 							onChange={({ target }) => setPassword(target.value)}
+							placeholder='give password here'
 						/>
 					</div>
 					<button type="submit">login</button>
@@ -225,10 +245,20 @@ const App = () => {
 		)
 	}
 
+	const BlogStepping = () => {
+		//define some blogs here, pass them off as parameters below
+		return (
+			<div>
+				<BlogList theBlogs={blogs} />
+			</div>
+		)
+	}
+
 	const blogView = () => {
 		return (
 			<div>
 				<h1>blogs</h1>
+				<p>Mirrors</p>
 				<Notification message={notification} />
 				<span>{user.name} logged in</span>
 				<button onClick={logOut}>logout</button>
@@ -236,9 +266,9 @@ const App = () => {
 				<p></p>
 				<p></p>
 				<Togglable buttonLabel="new blog" ref={appRef}>
-					<BlogForm addBlog={addBlog}/>
+					<BlogForm addBlog={addBlog} />
 				</Togglable>
-				<React2Blogs theBlogs={blogs}/>
+				<BlogStepping />
 			</div>
 		)
 	}
