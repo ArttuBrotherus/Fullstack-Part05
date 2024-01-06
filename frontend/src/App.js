@@ -189,15 +189,6 @@ const App = () => {
 		)
 	}
 
-	/*
-const numbers = [65, 44, 12, 4];
-const newArr = numbers.map(myFunction)
-
-function myFunction(num) {
-  return num * 10;
-}
-*/
-
 	const addBlog = async (blog) => {
 
 		appRef.current.toggleVisibility()
@@ -247,20 +238,10 @@ function myFunction(num) {
 		)
 	}
 
-	const BlogStepping = () => {
-		//define some blogs here, pass them off as parameters below
-		return (
-			<div>
-				<BlogList theBlogs={blogs} />
-			</div>
-		)
-	}
-
 	const blogView = () => {
 		return (
 			<div>
 				<h1>blogs</h1>
-				<p>Mirrors</p>
 				<Notification message={notification} />
 				<span>{user.name} logged in</span>
 				<button onClick={logOut}>logout</button>
@@ -270,7 +251,7 @@ function myFunction(num) {
 				<Togglable buttonLabel="new blog" ref={appRef}>
 					<BlogForm addBlog={addBlog} />
 				</Togglable>
-				<BlogStepping />
+				<BlogList theBlogs={blogs} />
 			</div>
 		)
 	}
@@ -282,4 +263,5 @@ function myFunction(num) {
 	)
 }
 
-export default App
+export default { App: App,
+	IndiBlog: IndiBlog }
