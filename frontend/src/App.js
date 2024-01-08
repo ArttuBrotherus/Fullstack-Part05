@@ -78,17 +78,14 @@ const App = () => {
 		document.location.reload()
 	}
 
-	const eachButton = (blog) => {
-		return {
-			visible: false,
-			full: blog
-		}
-	}
-
-	const dataOfLogged = async () => {
+	const fetchBlogData = async () => {
 		const serverBlogs = await pt05blogSer.getAll()
-		const blogButtons = await serverBlogs.map(eachButton)
-		const sortedBlogs = blogButtons.sort((a, b) => a.full.likes - b.full.likes)
+		const sortedBlogs = serverBlogs.map((blog) => {
+			return {
+				visible: false,
+				full: blog
+			}
+		}).sort((a, b) => a.full.likes - b.full.likes)
 		setBlogs(sortedBlogs)
 	}
 
@@ -98,7 +95,7 @@ const App = () => {
 			const user = JSON.parse(loggedUserJSON)
 			setUser(user)
 			pt05blogSer.setToken(user.token)
-			dataOfLogged()
+			fetchBlogData()
 		}
 	}, [])
 
@@ -116,7 +113,7 @@ const App = () => {
 			)
 			pt05blogSer.setToken(user.token)
 			setUser(user)
-			dataOfLogged()
+			fetchBlogData()
 			setUsername('')
 			setPassword('')
 		} catch (exception) {
@@ -162,7 +159,7 @@ const App = () => {
 	function blogRemoval(mongoBlog) {
 		if (window.confirm("Remove blog " + mongoBlog.title + " by " + mongoBlog.author)) {
 			pt05blogSer.remove(mongoBlog.id)
-			dataOfLogged()
+			fetchBlogData()
 		}
 	}
 
@@ -171,11 +168,9 @@ const App = () => {
 			const userTitleAuthor = userAdded.title + userAdded.author
 			const mongoTitleAuthor = mongoBlog.title + mongoBlog.author
 			if (userTitleAuthor === mongoTitleAuthor) {
-				return <div>
-					<button onClick={() => blogRemoval(mongoBlog)}>
+				return <button onClick={() => blogRemoval(mongoBlog)}>
 						remove
-					</button>
-				</div>
+				</button>
 			}
 		}
 		return
@@ -195,7 +190,7 @@ const App = () => {
 
 		await pt05blogSer.create(blog)
 
-		dataOfLogged()
+		fetchBlogData()
 
 		setUsAdBlogs(userAddedBlogs => userAddedBlogs.concat(blog))
 
