@@ -166,7 +166,7 @@ const App = () => {
 		}
 	}
 
-	function removeButton(mongoBlog) {
+	function removeButtonOptional(mongoBlog) {
 		for (let userAdded of userAddedBlogs) {
 			const userTitleAuthor = userAdded.title + userAdded.author
 			const mongoTitleAuthor = mongoBlog.title + mongoBlog.author
@@ -184,7 +184,7 @@ const App = () => {
 	const BlogList = ({ theBlogs }) => {
 		return theBlogs.map(
 			(oneBlog) => <IndiBlog blogData={oneBlog} key={oneBlog.full.id}
-				flipVisibility={flipVisibility} addLike={addLike} removeButton={removeButton}
+				flipVisibility={flipVisibility} addLike={addLike} removeButton={removeButtonOptional}
 				user={user}/>
 		)
 	}
