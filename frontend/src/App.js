@@ -238,7 +238,7 @@ const App = () => {
 		)
 	}
 
-	const blogView = () => {
+	const blogsView = () => {
 		return (
 			<div>
 				<h1>blogs</h1>
@@ -258,7 +258,7 @@ const App = () => {
 
 	return (
 		<div>
-			{user === null ? loginForm() : blogView()}
+			{user === null ? loginForm() : blogsView()}
 		</div>
 	)
 }
