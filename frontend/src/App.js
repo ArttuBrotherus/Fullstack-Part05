@@ -3,7 +3,8 @@ import loginService from './services/login'
 import pt05blogSer from './services/pt05blogSer'
 import Togglable from './components/togglable'
 import BlogForm from './components/blogViewSepa'
-import PropTypes from 'prop-types'
+import Notification from './components/notification'
+import LoginForm from './components/loginform'
 
 const IndiBlog = ({ blogData, flipVisibility, addLike, removeButton, user }) => {
 	const mongoBlog = blogData.full
@@ -38,40 +39,12 @@ const IndiBlog = ({ blogData, flipVisibility, addLike, removeButton, user }) => 
 }
 
 const App = () => {
-	const [username, setUsername] = useState('')
-	const [password, setPassword] = useState('')
 	const [user, setUser] = useState(null)
 	const [blogs, setBlogs] = useState([])
 	const [notification, setNotif] = useState('')
 	const [userAddedBlogs, setUsAdBlogs] = useState([])
 
 	const appRef = useRef()
-
-	const Notification = ({ message }) => {
-
-		const notifStyle = {
-			background: "lightgrey",
-			fontSize: "20px",
-			borderStyle: "solid",
-			borderRadius: "5px",
-			padding: "10px",
-			marginBottom: "10px"
-		}
-
-		if (message === '') {
-			return null
-		}
-
-		return (
-			<div className='error' style={notifStyle}>
-				{message}
-			</div>
-		)
-	}
-
-	Notification.propTypes = {
-		message: PropTypes.string.isRequired
-	}
 
 	function logOut() {
 		window.localStorage.clear()
@@ -99,8 +72,7 @@ const App = () => {
 		}
 	}, [])
 
-	const handleLogin = async (event) => {
-		event.preventDefault()
+	const handleLogin = async (username, password) => {
 
 		try {
 			const user = await loginService.login({
@@ -114,8 +86,6 @@ const App = () => {
 			pt05blogSer.setToken(user.token)
 			setUser(user)
 			fetchBlogData()
-			setUsername('')
-			setPassword('')
 		} catch (exception) {
 			setNotif("wrong username or password")
 			setTimeout(() => {
@@ -200,39 +170,6 @@ const App = () => {
 		}, 3000)
 	}
 
-
-	const loginForm = () => {
-		return (
-			<div>
-				<h2>log into application</h2>
-				<Notification message={notification} />
-				<form onSubmit={handleLogin}>
-					<div>
-						username
-						<input
-							type="text"
-							value={username}
-							name="Username"
-							onChange={({ target }) => setUsername(target.value)}
-							placeholder='give username here'
-						/>
-					</div>
-					<div>
-						password
-						<input
-							type="password"
-							value={password}
-							name="Password"
-							onChange={({ target }) => setPassword(target.value)}
-							placeholder='give password here'
-						/>
-					</div>
-					<button type="submit">login</button>
-				</form>
-			</div>
-		)
-	}
-
 	const blogsView = () => {
 		return (
 			<div>
@@ -253,7 +190,9 @@ const App = () => {
 
 	return (
 		<div>
-			{user === null ? loginForm() : blogsView()}
+			{user === null ?
+				<LoginForm handleLogin={handleLogin} notification={notification} />
+				: blogsView()}
 		</div>
 	)
 }
