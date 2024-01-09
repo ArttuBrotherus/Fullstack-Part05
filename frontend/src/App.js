@@ -5,38 +5,7 @@ import Togglable from './components/togglable'
 import BlogForm from './components/blogViewSepa'
 import Notification from './components/notification'
 import LoginForm from './components/loginform'
-
-const IndiBlog = ({ blogData, flipVisibility, addLike, removeButton, user }) => {
-	const mongoBlog = blogData.full
-	if (blogData.visible === false) {
-		return (
-			<div className='summary'>
-				{mongoBlog.title + " " + mongoBlog.author}
-				<button onClick={() => flipVisibility(mongoBlog.id)}>
-					view
-				</button>
-			</div>
-		)
-	} else {
-		return (
-			<div style={{ border: "1px solid black" }} className='allDetails'>
-				{mongoBlog.title + " " + mongoBlog.author}
-				<button onClick={() => flipVisibility(mongoBlog.id)}>
-					hide
-				</button>
-				<br />
-				{mongoBlog.url}
-				<br />
-				<span>likes</span>&nbsp;
-				{mongoBlog.likes}
-				<button onClick={() => addLike(blogData)}>like</button>
-				<br />
-				{user.name}
-				{removeButton(mongoBlog)}
-			</div>
-		)
-	}
-}
+import SingleBlog from './components/singleBlog'
 
 const App = () => {
 	const [user, setUser] = useState(null)
@@ -148,7 +117,7 @@ const App = () => {
 
 	const BlogList = ({ theBlogs }) => {
 		return theBlogs.map(
-			(oneBlog) => <IndiBlog blogData={oneBlog} key={oneBlog.full.id}
+			(oneBlog) => <SingleBlog blogData={oneBlog} key={oneBlog.full.id}
 				flipVisibility={flipVisibility} addLike={addLike} removeButton={removeButtonOptional}
 				user={user}/>
 		)
@@ -197,5 +166,4 @@ const App = () => {
 	)
 }
 
-export default { App: App,
-	IndiBlog: IndiBlog }
+export default { App: App }
