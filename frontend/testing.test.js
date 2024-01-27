@@ -4,7 +4,8 @@ import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/react'
 import All from './src/App'
 import userEvent from '@testing-library/user-event'
-const IndiBlog = All.IndiBlog
+import { waitFor } from '@testing-library/react'
+import SingleBlog from './src/components/singleBlog'
 
 //last parameter described below
 const inUsersPlace = { name: "Castr6th" }
@@ -40,20 +41,6 @@ let blogDataOfTest = [{
 }
 ]
 
-function flipVisibility(id) {
-	const varBlogs = blogDataOfTest.map((oneBlog) => {
-		if (oneBlog.full.id === id){
-			return { ...oneBlog,
-				visible: !oneBlog.visible
-			}
-		}else{
-			return oneBlog
-		}
-	}
-	)
-	blogDataOfTest = [...varBlogs]
-}
-
 function addLike(localBlog) {
 	const newBlog = {
 		...localBlog.full,
@@ -78,19 +65,11 @@ function blogRemoval(mongoBlog) {
 	blogDataOfTest = [ ...updatedBlogs]
 }
 
-function removeButton(mongoBlog) {
-	return <div>
-		<button onClick={() => blogRemoval(mongoBlog)}>
-			remove
-		</button>
-	</div>
-}
-
 describe('General tests', () => {
 
 	test('only title and author', async () => {
 
-		render(<IndiBlog blogData={blogDataOfTest[0]} flipVisibility={flipVisibility} addLike={addLike} removeButton={removeButton}
+		render(<SingleBlog blogData={blogDataOfTest[0]} flipVisibility={flipVisibility} addLike={addLike} removeButton={null}
 			user={inUsersPlace}/>)
 
 		const title = screen.getByText('The Artist', { exact: false })
@@ -102,5 +81,34 @@ describe('General tests', () => {
 		expect(url).toBeNull()
 		const likes = screen.queryByText('likes')
 		expect(likes).toBeNull()
+	})
+
+	/*
+			author: "N. Everyone",
+		id: "timetobe",
+		likes: 2234,
+		title: "The Artist",
+		url: "job/types"
+
+	Make a test, which checks that the blog's URL and number of likes are shown when the button controlling the shown details
+	has been clicked.
+	*/
+
+	test('Ex. 14', async () => {
+		render(<SingleBlog blogData={blogDataOfTest[0]} flipVisibility={flipVisibility} addLike={addLike} removeButton={null}
+			user={inUsersPlace}/>)
+		const user = userEvent.setup()
+
+		const viewButton = screen.getByText('view')
+		expect(viewButton).toBeDefined()
+		console.log("viewButton >>> " + String(viewButton))
+		await user.click(viewButton)
+
+		await waitFor(() => screen.getByText('job/types'))
+		const url = screen.getByText('job/types')
+		expect(url).toBeDefined()
+
+		const likes = screen.getByText('likes')
+		expect(likes).toBeDefined()
 	})
 })

@@ -42,6 +42,6 @@ const LoginForm = ({ handleLogin, notification }) => {
 			</form>
 		</div>
 	)
-}
+} // end component
 
 export default LoginForm
