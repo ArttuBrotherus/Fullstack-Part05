@@ -1,4 +1,4 @@
-import { useState, useRef } from "react"
+import { useState, useRef, forwardRef, useImperativeHandle } from "react"
 import pt05blogSer from '../services/pt05blogSer'
 import SingleBlog from "./singleBlog"
 import Notification from "./notification"
@@ -10,7 +10,7 @@ function logOut() {
 	document.location.reload()
 }
 
-const BlogsView = ({ notification, user, setNotif }) => {
+const BlogsView = forwardRef((props, refs) => {
 	const [blogs, setBlogs] = useState([])
 	const [userAddedBlogs, setUsAdBlogs] = useState([])
 
@@ -80,6 +80,12 @@ const BlogsView = ({ notification, user, setNotif }) => {
 		setBlogs(sortedBlogs)
 	}
 
+	useImperativeHandle(refs, () => {
+		return {
+			fetchBlogData
+		}
+	})
+
 	const addBlog = async (blog) => {
 
 		appRef.current.toggleVisibility()
@@ -91,16 +97,16 @@ const BlogsView = ({ notification, user, setNotif }) => {
 		//imporve this syntax (get rid of userAddedBlogs, use instead attribute in the localblog)
 		setUsAdBlogs(userAddedBlogs => userAddedBlogs.concat(blog))
 
-		setNotif("a new blog " + blog.title + " by " + blog.author + " added")
+		props.setNotif("a new blog " + blog.title + " by " + blog.author + " added")
 		setTimeout(() => {
-			setNotif('')
+			props.setNotif('')
 		}, 3000)
 	}
 
 	return <div>
 		<h1>blogs</h1>
-		<Notification message={notification} />
-		<span>{user.name} logged in</span>
+		<Notification message={props.notification} />
+		<span>{props.user.name} logged in</span>
 		<button onClick={logOut}>logout</button>
 		<p></p>
 		<p></p>
@@ -111,10 +117,12 @@ const BlogsView = ({ notification, user, setNotif }) => {
 		{blogs.map(
 			(oneBlog) => <SingleBlog blogData={oneBlog} key={oneBlog.full.id}
 				flipVisibility={flipVisibility} addLike={addLike} removeButton={removeButtonOptional}
-				user={user} />
+				user={props.user} />
 		)}
 	</div>
 
-} // end component
+}) // end component
+
+BlogsView.displayName = "BlogsView"
 
 export default BlogsView

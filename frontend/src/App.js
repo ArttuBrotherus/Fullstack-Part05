@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import loginService from './services/login'
 import pt05blogSer from './services/pt05blogSer'
 import LoginForm from './components/loginform'
@@ -8,13 +8,17 @@ const App = () => {
 	const [user, setUser] = useState(null)
 	const [notification, setNotif] = useState('')
 
+	const appRef = useRef()
+
 	useEffect(() => {
 		const loggedUserJSON = window.localStorage.getItem('loggedUser')
 		if (loggedUserJSON) {
 			const user = JSON.parse(loggedUserJSON)
 			setUser(user)
 			pt05blogSer.setToken(user.token)
-			fetchBlogData()
+			setTimeout(() => {
+				appRef.current.fetchBlogData()
+			}, 1000)
 		}
 	}, [])
 
@@ -31,7 +35,9 @@ const App = () => {
 			)
 			pt05blogSer.setToken(user.token)
 			setUser(user)
-			fetchBlogData()
+			setTimeout(() => {
+				appRef.current.fetchBlogData()
+			}, 1000)
 		} catch (exception) {
 			setNotif("wrong username or password")
 			setTimeout(() => {
@@ -44,7 +50,7 @@ const App = () => {
 		<div>
 			{user === null ?
 				<LoginForm handleLogin={handleLogin} notification={notification} />
-				: <BlogsView notification={notification} user={user} setNotif={setNotif} />}
+				: <BlogsView notification={notification} user={user} setNotif={setNotif} ref={appRef} />}
 		</div>
 	)
 }
