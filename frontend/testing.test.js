@@ -6,6 +6,7 @@ import All from './src/App'
 import userEvent from '@testing-library/user-event'
 import { waitFor } from '@testing-library/react'
 import SingleBlog from './src/components/singleBlog'
+import BlogsView from './src/components/LocalBlogs'
 
 //last parameter described below
 const inUsersPlace = { name: "Castr6th" }
@@ -67,9 +68,11 @@ function blogRemoval(mongoBlog) {
 
 describe('General tests', () => {
 
+	const user = userEvent.setup()
+
 	test('only title and author', async () => {
 
-		render(<SingleBlog blogData={blogDataOfTest[0]} flipVisibility={flipVisibility} addLike={addLike} removeButton={null}
+		render(<SingleBlog blogData={blogDataOfTest[0]} flipVisibility={null} addLike={addLike} removeButton={null}
 			user={inUsersPlace}/>)
 
 		const title = screen.getByText('The Artist', { exact: false })
@@ -83,32 +86,14 @@ describe('General tests', () => {
 		expect(likes).toBeNull()
 	})
 
-	/*
-			author: "N. Everyone",
-		id: "timetobe",
-		likes: 2234,
-		title: "The Artist",
-		url: "job/types"
-
-	Make a test, which checks that the blog's URL and number of likes are shown when the button controlling the shown details
-	has been clicked.
-	*/
-
 	test('Ex. 14', async () => {
-		render(<SingleBlog blogData={blogDataOfTest[0]} flipVisibility={flipVisibility} addLike={addLike} removeButton={null}
-			user={inUsersPlace}/>)
-		const user = userEvent.setup()
-
-		const viewButton = screen.getByText('view')
-		expect(viewButton).toBeDefined()
-		console.log("viewButton >>> " + String(viewButton))
-		await user.click(viewButton)
-
-		await waitFor(() => screen.getByText('job/types'))
-		const url = screen.getByText('job/types')
-		expect(url).toBeDefined()
+		render(<BlogsView notification={''} user={inUsersPlace} initialBlogs={blogDataOfTest} />)
+		const viewButton0 = screen.getAllByText('view')[0]
+		await user.click(viewButton0)
 
 		const likes = screen.getByText('likes')
 		expect(likes).toBeDefined()
+		const ex14url = screen.getByText('job/types', { exact: false })
+		expect(ex14url).toBeDefined()
 	})
 })

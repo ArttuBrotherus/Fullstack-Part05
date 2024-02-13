@@ -1,4 +1,4 @@
-import { useState, useRef, forwardRef, useImperativeHandle } from "react"
+import { useState, useRef, forwardRef, useImperativeHandle, useEffect } from "react"
 import pt05blogSer from '../services/pt05blogSer'
 import SingleBlog from "./singleBlog"
 import Notification from "./notification"
@@ -13,6 +13,14 @@ function logOut() {
 const BlogsView = forwardRef((props, refs) => {
 	const [blogs, setBlogs] = useState([])
 	const [userAddedBlogs, setUsAdBlogs] = useState([])
+
+	useEffect(() =>
+	{
+		if(props.initialBlogs !== undefined){
+			setBlogs(props.initialBlogs)
+		}
+	},
+	[props.initialBlogs])
 
 	const appRef = useRef()
 
