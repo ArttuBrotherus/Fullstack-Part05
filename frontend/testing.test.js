@@ -42,37 +42,13 @@ let blogDataOfTest = [{
 }
 ]
 
-function addLike(localBlog) {
-	const newBlog = {
-		...localBlog.full,
-		likes: localBlog.full.likes + 1
-	}
-	const newLocalBlog = {
-		visible: localBlog.visible,
-		full: newBlog
-	}
-	const updatedBlogs = blogDataOfTest.map(
-		(aBlog) => {
-			return aBlog.full.id === localBlog.full.id ? newLocalBlog : aBlog
-		}
-	)
-	blogDataOfTest = [...updatedBlogs]
-}
-
-function blogRemoval(mongoBlog) {
-	const updatedBlogs = blogDataOfTest.filter((localBlog) => {
-		return localBlog.full !== mongoBlog
-	})
-	blogDataOfTest = [ ...updatedBlogs]
-}
-
 describe('General tests', () => {
 
 	const user = userEvent.setup()
 
 	test('only title and author', async () => {
 
-		render(<SingleBlog blogData={blogDataOfTest[0]} flipVisibility={null} addLike={addLike} removeButton={null}
+		render(<SingleBlog blogData={blogDataOfTest[0]} flipVisibility={null} addLike={null} removeButton={null}
 			user={inUsersPlace}/>)
 
 		const title = screen.getByText('The Artist', { exact: false })
