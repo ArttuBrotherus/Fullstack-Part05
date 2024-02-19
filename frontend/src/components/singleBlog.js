@@ -24,7 +24,7 @@ const SingleBlog = ({ blogData, flipVisibility, addLike, removeButton, user }) =
 				<button onClick={() => addLike(blogData)}>like</button>
 				<br />
 				{user.name}
-				{removeButton(mongoBlog)}
+				{removeButton === undefined ? null : removeButton(mongoBlog)}
 			</div>
 		)
 	}

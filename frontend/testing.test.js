@@ -10,6 +10,16 @@ import BlogsView from './src/components/LocalBlogs'
 
 //last parameter described below
 const inUsersPlace = { name: "Castr6th" }
+const visibleBlog = {
+	visible: true,
+	full: {
+		author: "N. Everyone",
+		id: "timetobe",
+		likes: 2234,
+		title: "The Artist",
+		url: "job/types"
+	}
+}
 let blogDataOfTest = [{
 	visible: false,
 	full: {
@@ -71,5 +81,16 @@ describe('General tests', () => {
 		expect(likes).toBeDefined()
 		const ex14url = screen.getByText('job/types', { exact: false })
 		expect(ex14url).toBeDefined()
+	})
+
+	test('Ex. 15', async () => {
+		const mockLike = jest.fn()
+
+		render(<SingleBlog blogData={visibleBlog} user={inUsersPlace} addLike={mockLike}  />)
+		const likeButton = screen.getByText('like')
+		await user.click(likeButton)
+		await user.click(likeButton)
+
+		expect(mockLike.mock.calls).toHaveLength(2)
 	})
 })
