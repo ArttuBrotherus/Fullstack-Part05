@@ -7,6 +7,7 @@ import userEvent from '@testing-library/user-event'
 import { waitFor } from '@testing-library/react'
 import SingleBlog from './src/components/singleBlog'
 import BlogsView from './src/components/LocalBlogs'
+import BlogForm from './src/components/blogViewSepa'
 
 //last parameter described below
 const inUsersPlace = { name: "Castr6th" }
@@ -92,5 +93,31 @@ describe('General tests', () => {
 		await user.click(likeButton)
 
 		expect(mockLike.mock.calls).toHaveLength(2)
+	})
+
+	test('Ex. 16', async () => {
+		const mockAddBlog = jest.fn()
+
+		render(<BlogForm addBlog={mockAddBlog}/>)
+		const title = screen.getByPlaceholderText('write title here')
+		const author = screen.getByPlaceholderText('write author here')
+		const url = screen.getByPlaceholderText('write url here')
+
+		await user.type(title, 'One')
+		await user.type(author, 'Larry David')
+		await user.type(url, 'zero/three')
+
+		const createButton = screen.getByText('create')
+		await user.click(createButton)
+
+		expect(mockAddBlog.mock.calls).toHaveLength(1)
+		expect(mockAddBlog.mock.calls[0][0]).toEqual(
+			{
+				title: 'One',
+				author: 'Larry David',
+				url: 'zero/three',
+				likes: 0
+			}
+		)
 	})
 })
