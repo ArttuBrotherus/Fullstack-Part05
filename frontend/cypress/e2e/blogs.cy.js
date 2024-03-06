@@ -36,4 +36,25 @@ describe('Blog app', function () {
 		})
 
 	})
+
+	describe('When logged in', function () {
+		beforeEach(function () {
+			cy.get('#username').type('testuser')
+			cy.get('#password').type('DragonPassword')
+
+			cy.contains('login').click()
+		})
+
+		it('A blog can be created', function () {
+			cy.contains('new blog').click()
+
+			cy.get('input[placeholder="write title here"]').type("Reserving judgement")
+			cy.get('input[placeholder="write author here"]').type("Matthew J. Phillips")
+			cy.get('input[placeholder="write url here"]').type("res/jud")
+
+			cy.get('#create-button').click()
+			cy.contains('Reserving judgement')
+		})
+
+	})
 })
