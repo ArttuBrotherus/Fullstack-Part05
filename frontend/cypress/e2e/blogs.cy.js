@@ -56,5 +56,19 @@ describe('Blog app', function () {
 			cy.contains('Reserving judgement')
 		})
 
+		it('Ex. 5.20', function () {
+			cy.contains('new blog').click()
+			cy.get('input[placeholder="write title here"]').type("Reserving judgement")
+			cy.get('input[placeholder="write author here"]').type("Matthew J. Phillips")
+			cy.get('input[placeholder="write url here"]').type("res/jud")
+			cy.get('#create-button').click()
+
+			cy.contains('view').click()
+			for (let n = 0; n < 3; n++) {
+				cy.get('#like-button').click()
+			}
+			cy.contains('3')
+		})
+
 	})
 })
