@@ -24,9 +24,9 @@ const BlogsView = forwardRef((props, refs) => {
 
 	const appRef = useRef()
 
-	function blogRemoval(mongoBlog) {
+	async function blogRemoval(mongoBlog) {
 		if (window.confirm("Remove blog " + mongoBlog.title + " by " + mongoBlog.author)) {
-			pt05blogSer.remove(mongoBlog.id)
+			await pt05blogSer.remove(mongoBlog.id)
 			fetchBlogData()
 		}
 	}

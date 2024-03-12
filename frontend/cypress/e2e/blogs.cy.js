@@ -70,5 +70,20 @@ describe('Blog app', function () {
 			cy.contains('3')
 		})
 
+		it('Ex. 5.21', function () {
+			cy.contains('new blog').click()
+			cy.get('input[placeholder="write title here"]').type("Reserving judgement")
+			cy.get('input[placeholder="write author here"]').type("Matthew J. Phillips")
+			cy.get('input[placeholder="write url here"]').type("res/jud")
+			cy.get('#create-button').click()
+			cy.contains('view').click()
+
+			cy.contains('remove').click()
+			cy.on('window:confirm', () => true)
+
+			cy.contains('Matthew').should('not.exist')
+			cy.contains('view').should('not.exist')
+		})
+
 	})
 })
