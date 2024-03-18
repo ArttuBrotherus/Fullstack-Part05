@@ -14,9 +14,8 @@ const BlogsView = forwardRef((props, refs) => {
 	const [blogs, setBlogs] = useState([])
 	const [userAddedBlogs, setUsAdBlogs] = useState([])
 
-	useEffect(() =>
-	{
-		if(props.initialBlogs !== undefined){
+	useEffect(() => {
+		if (props.initialBlogs !== undefined) {
 			setBlogs(props.initialBlogs)
 		}
 	},
@@ -65,17 +64,11 @@ const BlogsView = forwardRef((props, refs) => {
 	}
 
 	function removeButtonOptional(mongoBlog) {
-		for (let userAdded of userAddedBlogs) {
-			const userTitleAuthor = userAdded.title + userAdded.author
-			const mongoTitleAuthor = mongoBlog.title + mongoBlog.author
-			if (userTitleAuthor === mongoTitleAuthor) {
-				return <button onClick={() => blogRemoval(mongoBlog)}>
-					remove
-				</button>
-			}
-		}
-		return
+		return <button onClick={() => blogRemoval(mongoBlog)}>
+			remove
+		</button>
 	}
+
 
 	const fetchBlogData = async () => {
 		const serverBlogs = await pt05blogSer.getAll()
