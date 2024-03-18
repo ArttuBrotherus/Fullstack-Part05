@@ -1,4 +1,4 @@
-const SingleBlog = ({ blogData, flipVisibility, addLike, removeButton, user }) => {
+const SingleBlog = ({ blogData, flipVisibility, addLike, RemoveButton, user }) => {
 	const mongoBlog = blogData.full
 	if (blogData.visible === false) {
 		return (
@@ -24,7 +24,8 @@ const SingleBlog = ({ blogData, flipVisibility, addLike, removeButton, user }) =
 				<button id="like-button" onClick={() => addLike(blogData)}>like</button>
 				<br />
 				{mongoBlog.user.name}
-				{mongoBlog.user.username === user.username ? removeButton(mongoBlog) : null}
+				{mongoBlog.user.username === user.username ?
+					<RemoveButton mongoBlog={mongoBlog} /> : null}
 			</div>
 		)
 	}

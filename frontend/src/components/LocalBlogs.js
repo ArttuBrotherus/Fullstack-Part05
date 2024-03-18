@@ -63,7 +63,7 @@ const BlogsView = forwardRef((props, refs) => {
 		setBlogs(updatedBlogs)
 	}
 
-	function removeButtonOptional(mongoBlog) {
+	function RemoveButton({ mongoBlog }) {
 		return <button onClick={() => blogRemoval(mongoBlog)}>
 			remove
 		</button>
@@ -117,7 +117,7 @@ const BlogsView = forwardRef((props, refs) => {
 		</Togglable>
 		{blogs.map(
 			(oneBlog) => <SingleBlog blogData={oneBlog} key={oneBlog.full.id}
-				flipVisibility={flipVisibility} addLike={addLike} removeButton={removeButtonOptional}
+				flipVisibility={flipVisibility} addLike={addLike} RemoveButton={RemoveButton}
 				user={props.user} />
 		)}
 	</div>
