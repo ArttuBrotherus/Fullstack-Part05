@@ -28,6 +28,7 @@ const App = () => {
 			const user = await loginService.login({
 				username, password,
 			})
+			console.log(user)
 
 			//important: note that the term's 'loggedUser' and not something else
 			window.localStorage.setItem(
@@ -39,7 +40,8 @@ const App = () => {
 				appRef.current.fetchBlogData()
 			}, 1000)
 		} catch (exception) {
-			setNotif("wrong username or password")
+			console.error(exception)
+			setNotif("Error. Wrong username or password?")
 			setTimeout(() => {
 				setNotif('')
 			}, 3000)
