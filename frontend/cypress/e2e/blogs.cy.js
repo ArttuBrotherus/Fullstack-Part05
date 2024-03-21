@@ -7,6 +7,7 @@ describe('Blog app', function () {
 			username: 'testuser',
 			password: 'DragonPassword'
 		}
+
 		cy.request('POST', 'http://localhost:3001/api/users/', userData)
 
 		cy.visit('http://localhost:3000')
@@ -32,7 +33,7 @@ describe('Blog app', function () {
 			cy.get('#password').type('incorrect')
 
 			cy.contains('login').click()
-			cy.contains('wrong username or password')
+			cy.contains('Error. Wrong username or password?')
 		})
 
 	})
@@ -85,5 +86,55 @@ describe('Blog app', function () {
 			cy.contains('view').should('not.exist')
 		})
 
+		it('Ex. 5.22', function() {
+			//creating another user
+			const MrX = {
+				name: 'Xoon Menly',
+				username: 'Mr. X',
+				password: 'raccoonpolitics'
+			}
+			cy.request('POST', 'http://localhost:3001/api/users/', MrX)
+
+			//data of the blogs added by testuser
+			const testuserData = [
+				[
+					"Reserving judgement",
+					"Matthew J. Phillips",
+					"res/jud"
+				],
+				[
+					"Unscientific mutation",
+					"Chris Valentine",
+					"sta/rs"
+				]
+			]
+
+			//adding testuser's data
+			for (let entry of testuserData) {
+				cy.contains('new blog').click()
+				cy.get('input[placeholder="write title here"]').type(entry[0])
+				cy.get('input[placeholder="write author here"]').type(entry[1])
+				cy.get('input[placeholder="write url here"]').type(entry[2])
+				cy.get('#create-button').click()
+			}
+
+			//viewing blog data + removing the first blog
+			cy.contains('view').click()
+			cy.contains('view').click()
+			cy.contains('remove').click()
+			cy.on('window:confirm', () => true)
+			cy.contains('remove')
+
+			//logging out + logging in as Mr. X
+			cy.contains('logout').click()
+			cy.get('#username').type('Mr. X')
+			cy.get('#password').type('raccoonpolitics')
+			//
+			cy.contains('login').click()
+
+			//is it possible to remove testuser's blog (does it have the remove button)?
+			cy.contains('view').click()
+			cy.contains('remove').should('not.exist')
+		})
 	})
 })
