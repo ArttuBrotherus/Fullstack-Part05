@@ -136,5 +136,54 @@ describe('Blog app', function () {
 			cy.contains('view').click()
 			cy.contains('remove').should('not.exist')
 		})
+
+		it('Ex. 5.23', function() {
+			//adding testuser's data
+			const ex23data = [
+				[
+					"Reserving judgement",
+					"Matthew J. Phillips",
+					"res/jud"
+				],
+				[
+					"Unscientific mutation",
+					"Chris Valentine",
+					"sta/rs"
+				],
+				[
+					"Organ donation",
+					"Poe Dullard",
+					"mal/lard"
+				]
+			]
+
+			//adding testuser's data
+			for (let entry of ex23data) {
+				cy.get('#reveal-button').click()
+				cy.get('input[placeholder="write title here"]').type(entry[0])
+				cy.get('input[placeholder="write author here"]').type(entry[1])
+				cy.get('input[placeholder="write url here"]').type(entry[2])
+				cy.get('#create-button').click()
+			}
+
+			//waiting until all the blogs can be seen
+			cy.contains('added').should('not.exist')
+
+			//giving each blog a different amount of likes
+			const likes = [5, 2, 7]
+			for (let n = 0; n < 3; n++) {
+				cy.get("div[name=mapped-blogs] > div").eq(n).contains('view').click()
+				for (let like = 0; like < likes[n]; like++) {
+					cy.get('#like-button').click()
+				}
+				cy.contains('hide').click()
+			}
+
+			//reloading the page => ascertaining the order of the blogs
+			cy.reload()
+			cy.get("div[name=mapped-blogs] > div").eq(0).contains('Dullard')
+			cy.get("div[name=mapped-blogs] > div").eq(1).contains('Reserving')
+			cy.get("div[name=mapped-blogs] > div").eq(2).contains('Unscientific')
+		})
 	})
 })

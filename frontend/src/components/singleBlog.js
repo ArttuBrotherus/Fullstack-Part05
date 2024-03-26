@@ -4,7 +4,7 @@ const SingleBlog = ({ blogData, flipVisibility, addLike, RemoveButton, user }) =
 		return (
 			<div className='summary'>
 				{mongoBlog.title + " " + mongoBlog.author}
-				<button onClick={() => flipVisibility(mongoBlog.id)}>
+				<button id="view-button" onClick={() => flipVisibility(mongoBlog.id)}>
 					view
 				</button>
 			</div>
@@ -13,7 +13,7 @@ const SingleBlog = ({ blogData, flipVisibility, addLike, RemoveButton, user }) =
 		return (
 			<div style={{ border: "1px solid black" }} className='allDetails'>
 				{mongoBlog.title + " " + mongoBlog.author}
-				<button onClick={() => flipVisibility(mongoBlog.id)}>
+				<button id="hide-button" onClick={() => flipVisibility(mongoBlog.id)}>
 					hide
 				</button>
 				<br />

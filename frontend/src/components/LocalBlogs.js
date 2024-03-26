@@ -77,7 +77,7 @@ const BlogsView = forwardRef((props, refs) => {
 				visible: false,
 				full: blog
 			}
-		}).sort((a, b) => a.full.likes - b.full.likes)
+		}).sort((a, b) => b.full.likes - a.full.likes)
 		setBlogs(sortedBlogs)
 	}
 
@@ -115,11 +115,13 @@ const BlogsView = forwardRef((props, refs) => {
 		<Togglable buttonLabel="new blog" ref={appRef}>
 			<BlogForm addBlog={addBlog} />
 		</Togglable>
-		{blogs.map(
-			(oneBlog) => <SingleBlog blogData={oneBlog} key={oneBlog.full.id}
-				flipVisibility={flipVisibility} addLike={addLike} RemoveButton={RemoveButton}
-				user={props.user} />
-		)}
+		<div name="mapped-blogs">
+			{blogs.map(
+				(oneBlog) => <SingleBlog blogData={oneBlog} key={oneBlog.full.id}
+					flipVisibility={flipVisibility} addLike={addLike} RemoveButton={RemoveButton}
+					user={props.user} />
+			)}
+		</div>
 	</div>
 
 }) // end component
